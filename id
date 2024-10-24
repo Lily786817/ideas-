@@ -1,0 +1,131 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { MessageSquare, ThumbsUp, Flag, Send, Plus } from 'lucide-react';
+
+const IdeasFlowing = () => {
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      author: "Sarah J.",
+      title: "Fantasy Novel Concept",
+      content: "In a world where dreams become physical objects...",
+      genre: "Fantasy",
+      likes: 12,
+      comments: [
+        { author: "Mike", content: "Love this concept! Have you considered..." },
+        { author: "Lisa", content: "This reminds me of lucid dreaming but with a unique twist!" }
+      ]
+    },
+    {
+      id: 2,
+      author: "Alex M.",
+      title: "Mystery Series Outline",
+      content: "A detective who can only solve crimes in their dreams...",
+      genre: "Mystery",
+      likes: 8,
+      comments: [
+        { author: "John", content: "Interesting premise! How would the evidence hold up?" }
+      ]
+    }
+  ]);
+
+  const [newPost, setNewPost] = useState({ title: '', content: '', genre: '' });
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4">
+      {/* Header */}
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold text-blue-600 mb-2">Ideas Flowing</h1>
+        <p className="text-gray-600">A safe space for aspiring authors to share and grow</p>
+      </div>
+
+      {/* New Post Form */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Share Your Idea</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <Input 
+              placeholder="Title of your work"
+              value={newPost.title}
+              onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+            />
+            <Input 
+              placeholder="Genre"
+              value={newPost.genre}
+              onChange={(e) => setNewPost({...newPost, genre: e.target.value})}
+            />
+            <Textarea 
+              placeholder="Share your story concept, outline, or creative ideas..."
+              className="h-32"
+              value={newPost.content}
+              onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+            />
+            <Button className="w-full">
+              <Plus className="mr-2 h-4 w-4" />
+              Share Idea
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Posts Feed */}
+      <div className="space-y-4">
+        {posts.map(post => (
+          <Card key={post.id} className="w-full">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle className="text-xl">{post.title}</CardTitle>
+                  <p className="text-sm text-gray-500">by {post.author} • {post.genre}</p>
+                </div>
+                <Button variant="outline" size="sm">
+                  <Flag className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">{post.content}</p>
+              
+              {/* Interaction Buttons */}
+              <div className="flex gap-4 mb-4">
+                <Button variant="outline" size="sm">
+                  <ThumbsUp className="h-4 w-4 mr-2" />
+                  {post.likes}
+                </Button>
+                <Button variant="outline" size="sm">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  {post.comments.length}
+                </Button>
+              </div>
+
+              {/* Comments Section */}
+              <div className="space-y-2">
+                {post.comments.map((comment, index) => (
+                  <div key={index} className="bg-gray-50 p-2 rounded">
+                    <p className="text-sm font-medium">{comment.author}</p>
+                    <p className="text-sm">{comment.content}</p>
+                  </div>
+                ))}
+                
+                {/* Comment Input */}
+                <div className="flex gap-2 mt-2">
+                  <Input placeholder="Add a supportive comment..." className="flex-1" />
+                  <Button size="sm">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default IdeasFlowing;
